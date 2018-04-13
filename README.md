@@ -759,7 +759,7 @@ module.exports = {
         levelOfProfficiency: 2,
         hoursPracticed: 1
       }
-    }], {});
+    ], {});
   },
 
   down: (queryInterface, Sequelize) => {
