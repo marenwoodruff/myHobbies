@@ -163,8 +163,6 @@ router.get('/', (req, res) => {
     <% hobbies.forEach((hobby) => { %>
       <li class="margin-bottom">
         <h2><a href="/hobbies/<%= id %>"><%= hobby.name %></a></h2>
-        <h3>description: <%= hobby.description %></h3>
-        <p><strong>difficulty:</strong> <%= hobby.difficulty %>, <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %></p>
       </li>
     <% }); %>
 
@@ -251,6 +249,10 @@ router.get('/:id', (req, res) => {
 <p>
    <strong>difficulty:</strong> <%= hobby.difficulty %>, 
    <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %>
+</p>
+
+<p>
+   <strong>hours practiced:</strong> <%= hobby.hoursPracticed %>
 </p>
 
 <a class="btn btn-outline-info margin-top" href="/hobbies/<%= id %>/edit">edit hobby</a>
@@ -452,7 +454,7 @@ router.delete('/:id', (req, res) => {
 
 # Add Sequelize
 
-### 15. install sequelize
+### 1. install sequelize
 
 ```
 npm install --save sequelize
@@ -494,7 +496,7 @@ sequelize init
 
 - git commit...
 
-### 16. create a new controller for sequelize (only so that we can compare the two
+### 2. create a new controller for sequelize (only so that we can compare the two
 
 ```
 touch routes/hobbies_controller_sequelize.js
@@ -509,7 +511,7 @@ var hobbiesController = require('./routes/hobbies_controller_sequelize');
 
 - git commit...
 
-### 17. create your hobby model
+### 3. create your hobby model
 
 ```
 sequelize model:create --name hobby -- attributes name:string,description:string,difficulty:float,levelOfProfficiency:float,hoursPracticed:float
@@ -519,12 +521,12 @@ sequelize db:migrate
 
 - git commit...
 
-### 17. add the model to your controller
+### 4. add the model to your controller
 `const Hobby = require('../models').hobby;`
 
 - git commit...
 
-### 18. update the index route
+### 5. update the index route
 
 ```
 // index route
@@ -545,16 +547,167 @@ router.get('/', (req, res) => {
 
 #### in index.ejs
 
-`<h2><a href="/hobbies/<%= hobby.id %>"><%= hobby.name %></a></h2>`
+```
+...
+<h2><a href="/hobbies/<%= hobby.id %>"><%= hobby.name %></a></h2>
+...
+```
 
+- check in postman/browser
 - git commit...
 
-### 19. update the show route
+### 6. update the show route
 
 ```
-
+// show route
+router.get('/:id', (req, res) => {
+  // res.send('we showed it');
+  Hobby.findById(req.params.id)
+    .then((hobby) => {
+      res.render('hobbies/show', {
+        hobby: hobby
+      });
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
 ```
 
-### 19. add a seeds file + db:migrate
+- check in postman/browser
+- git commit...
+
+#### in show.ejs
+
+```
+...
+
+<a class="btn btn-outline-info margin-top" href="/hobbies/<%= hobby.id %>/edit">edit hobby</a>
+
+<form action="/hobbies/<%= hobby.id %>?_method=DELETE" method="POST">
+  <input class="btn btn-outline-danger sm-margin-top" type="submit" value="delete hobby" />
+</form>
+```
+
+- check in postman/browser
+- git commit...
+
+### 7. update the new route
+
+```
+// new route
+router.get('/new', (req, res) => {
+  // res.send('we knew it');
+
+  res.render('hobbies/new', {
+    // building an instance of hobby
+    hobby: Hobby.build()
+  })
+  .catch((err) => {
+    res.status(400).render('error');
+  });
+});
+```
+
+- check in postman/browser
+- git commit...
+
+### 8. update the post route
+
+```
+// create route
+router.post('/', (req, res) => {
+  // requires an object with properties that map to the properties of the object
+  Hobby.create(req.body)
+    .then((hobby) => {
+      res.redirect('/hobbies');
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
+```
+
+- check in postman/browser
+- git commit...
+
+### 9. update the edit route
+
+```
+// edit route
+router.get('/:id/edit', (req, res) => {
+  // res.send('we do it');
+  Hobby.findById(req.params.id)
+    .then((hobby) => {
+      res.render('hobbies/edit', {
+        hobby: hobby
+      });
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
+```
+
+#### in edit.ejs
+
+```
+<form method="POST" action="/hobbies/<%= hobby.id %>?_method=PUT">
+   ...
+
+<a class="btn btn-outline-info margin-top" href="/hobbies/<%= hobby.id %>">back</a>
+```
+
+- check in postman/browser
+- git commit...
+
+### 9. update the put route
+
+```
+// update route
+router.put('/:id', (req, res) => {
+  Hobby.findById(req.params.id)
+    .then((hobby) => {
+      return hobby.update(req.body); // update method returns a promise
+    })
+    .then((updatedHobby) => { // the hobby parameter is the updated hobby
+      res.render('hobbies/show', {
+        hobby: updatedHobby
+      });
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
+```
+
+- check in postman/browser
+- git commit...
+
+### 10. update the delete route
+
+```
+// delete route
+router.delete('/:id', (req, res) => {
+  Hobby.findById(req.params.id)
+    .then((hobby) => {
+      return hobby.destroy(); // destroy method is an asynchronous call that returns a promise
+    })
+    .then(() => {
+      // redirect back to index route
+      res.redirect('/hobbies');
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
+```
+
+- check in postman/browser
+- git commit...
+
+### 11. add a seeds file + db:migrate
+
+
 
 
