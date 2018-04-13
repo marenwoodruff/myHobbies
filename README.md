@@ -456,6 +456,8 @@ router.delete('/:id', (req, res) => {
 - check in postman/browser
 - git commit...
 
+<br />
+
 ---
 
 # Add Sequelize
@@ -773,6 +775,8 @@ sequelize db:migrate
 
 - check in postman/browser
 
-# CONGRATS!
+<br />
+
+# CONGRATS!!!
 
 ![high five](https://media.giphy.com/media/OcZp0maz6ALok/giphy.gif)
