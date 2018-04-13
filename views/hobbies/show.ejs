@@ -1,0 +1,14 @@
+<h1><%= hobby.name %></h1>
+<h3>description: <%= hobby.description %></h3>
+<br />
+
+<p>
+  <strong>difficulty:</strong> <%= hobby.difficulty %>,
+  <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %>
+</p>
+
+<a class="btn btn-outline-info margin-top" href="/hobbies/<%= hobby.id %>/edit">Edit Hobby</a>
+
+<form action="/hobbies/<%= hobby.id %>?_method=DELETE" method="POST">
+  <input class="btn btn-outline-danger sm-margin-top" type="submit" value="Delete Hobby" />
+</form>

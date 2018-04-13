@@ -1,0 +1,18 @@
+<h1>My Hobbies</h1>
+
+<% if (hobbies && hobbies.length) { %>
+  <ul>
+    <% hobbies.forEach((hobby) => { %>
+      <li class="margin-bottom">
+        <h2><a href="/hobbies/<%= hobby.id %>"><%= hobby.name %></a></h2>
+        <h3>description: <%= hobby.description %></h3>
+        <p><strong>difficulty:</strong> <%= hobby.difficulty %>, <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %></p>
+      </li>
+    <% }); %>
+
+    <a class="btn btn-outline-info margin-top" href="/hobbies/new">Add a New Hobby</a>
+  </ul>
+<% } else { %>
+  <h3>You don't have any hobbies!</h3>
+  <a class="btn btn-outline-info margin-top" href="/hobbies/new">Add a New Hobby</a>
+<% } %> 
