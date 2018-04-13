@@ -214,6 +214,7 @@ a {
 ### 6. add a show route
 
 ```
+// show route
 router.get('/:id', (req, res) => {
   res.send('we showed it');
 });
