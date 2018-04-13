@@ -772,3 +772,7 @@ sequelize db:migrate
 ```
 
 - check in postman/browser
+
+# CONGRATS!
+
+![high five](https://media.giphy.com/media/OcZp0maz6ALok/giphy.gif)
