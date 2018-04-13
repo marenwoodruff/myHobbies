@@ -8,36 +8,6 @@ hobbies
    - levelOfProfficiency (float/integer)     
    - hoursPracticed (float/integer)
 
-set up seeds:
-#### in db/hobbies_data.js
-
-```
-module.exports = {
-  seededHobbies: [
-    {
-      name: "playing guitar",
-      description: "6 stringed instrument- nylon vs steel strings, classical vs flamenco, acoustic vs electric",
-      difficulty: 3,
-      levelOfProfficiency: 3,
-      hoursPracticed: 5
-    }, 
-    {
-      name: "drawing",
-      description: "pencil to paper",
-      difficulty: 2,
-      levelOfProfficiency: 2,
-      hoursPracticed: 1
-    }
-  ]
-};
-```
-
-require db in your controller
-
-```
-var datat = require('../db/hobbies_data').seededHobbies;
-```
-
 ### 2. install dependencies/get app up and running
 
 ```
@@ -90,9 +60,44 @@ var hobbiesController = require('./routes/hobbies_controller');
 app.use('/hobbies', hobbiesController);
 ```
 
-look at postman/browser
+```
+mkdir db
+touch db/hobbies_data.js
+```
 
-git commit...
+#### in db/hobbies_data.js
+
+- set up seeds:
+
+```
+module.exports = {
+  seededHobbies: [
+    {
+      name: "playing guitar",
+      description: "6 stringed instrument- nylon vs steel strings, classical vs flamenco, acoustic vs electric",
+      difficulty: 3,
+      levelOfProfficiency: 3,
+      hoursPracticed: 5
+    }, 
+    {
+      name: "drawing",
+      description: "pencil to paper",
+      difficulty: 2,
+      levelOfProfficiency: 2,
+      hoursPracticed: 1
+    }
+  ]
+};
+```
+
+- require the seeds file in your controller
+
+```
+var datat = require('../db/hobbies_data').seededHobbies;
+```
+
+- look at postman/browser
+- git commit...
 
 ### 4. set up index route
 
@@ -103,9 +108,8 @@ router.get('/', (req, res) => {
 });
 ```
 
-check that it works in postman
-
-git commit...
+- check that it works in postman
+- git commit...
 
 ### 5. add an index view
 
@@ -114,7 +118,7 @@ mkdir views/hobbies
 touch views/hobbies/index.ejs
 ```
 
-add a dummy h1- <h1>My Hobbies</h1>
+- add a dummy h1- `<h1>My Hobbies</h1>`
 
 #### in hobbies_controller
 
@@ -140,9 +144,8 @@ router.get('/', (req, res) => {
 </ul>
 ```
 
-check in postman/browser
-
-git commit...
+- check in postman/browser
+- git commit...
 
 ### 6. add a show route
 
@@ -152,9 +155,8 @@ router.get('/:id', (req, res) => {
 });
 ```
 
-check in postman/browser
-
-git commit...
+- check in postman/browser
+- git commit...
 
 ### 7. add a show view
 `touch views/myHobbies/show.ejs`
@@ -199,14 +201,13 @@ router.get('/new', (req, res) => {
 });
 ```
 
-check in postman/browser
-
-git commit...
+- check in postman/browser
+- git commit...
 
 ### 9. add a new view
 `touch views/myHobbies/new.ejs`
 
-check that it works in postman
+- check that it works in postman
 
 #### in new view
 
@@ -247,7 +248,7 @@ check that it works in postman
 </div>
 ```
 
-git commit...
+- git commit...
 
 ### 10. add in a post route
 
@@ -269,7 +270,7 @@ router.post('/', (req, res) => {
 #### change the form action/method
 `<form action="/hobbies" method="POST">`
 
-git commit...
+- git commit...
 
 ### 11. set up an edit route
 
@@ -280,9 +281,8 @@ router.get('/:id/edit', (req, res) => {
 });
 ```
 
-check in postman
-
-git commit...
+- check in postman
+- git commit...
 
 ### 12. set up an edit view
 `touch views/myHobbies/edit.ejs`
@@ -345,7 +345,7 @@ router.get('/:id/edit', (req, res) => {
 </div>
 ```
 
-git commit...
+- git commit...
 
 ### 13. add a PUT route
 
@@ -362,6 +362,8 @@ router.put('/:id', function(req, res) {
   res.redirect('/hobbies');
 });
 ```
+
+- git commit...
 
 ### 14. add a delete route
 
@@ -384,6 +386,8 @@ router.delete('/:id', (req, res) => {
 </form>
 ```
 
+- git commit...
+
 ### 15. install sequelize
 ```
 npm install --save sequelize
@@ -400,13 +404,18 @@ sequelize init
 - seeders
 - migrations
 
-update config/config.json- add in postgres
+- update config/config.json- add in postgres
+- git commit...
 
 ### 16. create your hobby model
 
 ```
 sequelize model:create --name hobby -- attributes name:string,description:string,difficulty:float,levelOfProfficiency:float,hoursPracticed:float
+
+sequelize db:migrate
 ```
+
+- git commit...
 
 ### 17. add the model to your controller
 
