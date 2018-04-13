@@ -29,19 +29,41 @@ app.use(methodOverride('_method'));
 ```
 
 #### update the title on the index controller
-- add views/layout.ejs, and DRY up the views/index.ejs
+- add `views/layout.ejs`, and DRY up the views/index.ejs
+
+#### in layout.ejs
+
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Hobbies App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="container">
+      <%- body %>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
+```
 
 #### in package.json
-- add "start:dev": "nodemon ./bin/www"
+- add `"start:dev": "nodemon ./bin/www"`
 
 #### in another tab
 - start the server- npm run start:dev
 - go to localhost:3000 to make sure that you didn't break anything
 
-git init...
-git commit
+#### in first tab
+- git init...
+- git commit
 
-### 3. set up my_hobbies_controller.js
+### 3. set up hobbies_controller.js
 `touch routes/hobbies_controller.js`
 
 #### in my_hobbies_controller.js
@@ -67,7 +89,7 @@ touch db/hobbies_data.js
 
 #### in db/hobbies_data.js
 
-- set up seeds:
+##### set up seeds:
 
 ```
 module.exports = {
@@ -90,13 +112,13 @@ module.exports = {
 };
 ```
 
-- require the seeds file in your controller
+##### require the seeds file in your controller
 
 ```
-var datat = require('../db/hobbies_data').seededHobbies;
+var data = require('../db/hobbies_data').seededHobbies;
 ```
 
-- look at postman/browser
+- chcek in postman/browser
 - git commit...
 
 ### 4. set up index route
@@ -108,7 +130,7 @@ router.get('/', (req, res) => {
 });
 ```
 
-- check that it works in postman
+- chcek in postman/browser
 - git commit...
 
 ### 5. add an index view
@@ -120,7 +142,7 @@ touch views/hobbies/index.ejs
 
 - add a dummy h1- `<h1>My Hobbies</h1>`
 
-#### in hobbies_controller
+#### in hobbies_controller.js
 
 ```
 // index route
@@ -130,18 +152,53 @@ router.get('/', (req, res) => {
 });
 ```
 
-#### in views/myHobbies/index.ejs
+#### in views/hobbies/index.ejs
 
 ```
 <ul>
-  <% hobbies.forEach(hobby => { %>
+  <% hobbies.forEach((hobby, index) => { %>
     <li>
-      <h1><%= hobby.name %></h1>
+      <h1><a href="<%= index %>"><%= hobby.name %></a></h1>
       <h3>description: <%= hobby.description %></h3>
-      <p><strong>difficulty:</strong> <%= hobby.difficulty %>, <strong>level of profficiency:</strong> <%=         hobby.levelOfProfficiency %></p>
+      <p>
+         <strong>difficulty:</strong> <%= hobby.difficulty %>, 
+         <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %>
+      </p>
     </li>
   <% }); %>
 </ul>
+```
+
+#### in public/stylesheets/styles.css
+
+```
+body {
+  margin: 10vh 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  text-align: center;
+}
+
+h1, .margin-bottom {
+  margin-bottom: 50px;
+}
+
+.margin-top {
+  margin-top: 50px;
+}
+
+.sm-margin-top {
+  margin-top: 25px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+a {
+  color: #68b3c2;
+}
 ```
 
 - check in postman/browser
@@ -159,15 +216,15 @@ router.get('/:id', (req, res) => {
 - git commit...
 
 ### 7. add a show view
-`touch views/myHobbies/show.ejs`
+`touch views/hobbies/show.ejs`
 
-#### in controller
+#### in hobbies_controller.js
 
 ```
 // show route
 router.get('/:id', (req, res) => {
   // res.send('we showed it');
-  res.render('myHobbies/show', {
+  res.render('hobbies/show', {
     hobby: {
       id: req.params.id,
       name: data[req.params.id].name,
@@ -192,6 +249,8 @@ router.get('/:id', (req, res) => {
 </p>
 ```
 
+- check in postman/browser
+- git commit...
 
 ### 8. add a new route
 
@@ -205,9 +264,7 @@ router.get('/new', (req, res) => {
 - git commit...
 
 ### 9. add a new view
-`touch views/myHobbies/new.ejs`
-
-- check that it works in postman
+`touch views/hobbies/new.ejs`
 
 #### in new view
 
@@ -217,8 +274,8 @@ router.get('/new', (req, res) => {
 <div class="container>
   <form>
     <div class="form-group">
-      <label for="name">Hobby Name</label>
-      <input class="form-control" type="text" id="name">
+      <label for="name">Hobby Name <span class="red">(required)</span></label>
+      <input class="form-control" type="text" id="name" required>
     </div>
 
     <div class="form-group">
@@ -248,6 +305,7 @@ router.get('/new', (req, res) => {
 </div>
 ```
 
+- check in postman/browser
 - git commit...
 
 ### 10. add in a post route
@@ -270,6 +328,7 @@ router.post('/', (req, res) => {
 #### change the form action/method
 `<form action="/hobbies" method="POST">`
 
+- check in postman/browser
 - git commit...
 
 ### 11. set up an edit route
@@ -314,7 +373,7 @@ router.get('/:id/edit', (req, res) => {
 <div>
   <form action="/hobbies/<%= id %>?_method=PUT" method="POST">
     <div class="form-group">
-      <label for="name">Hobby Name</label>
+      <label for="name">Hobby Name <span class="red">(required)</span></label>
       <input class="form-control" type="text" name="name" value="<%= hobby.name %>">
     </div>
 
@@ -345,13 +404,14 @@ router.get('/:id/edit', (req, res) => {
 </div>
 ```
 
+- check in postman/browser
 - git commit...
 
 ### 13. add a PUT route
 
 ```
 // update route
-router.put('/:id', function(req, res) {
+router.put('/:id', (req, res) => {
   var hobbyToEdit = data[req.params.id];
 
   hobbyToEdit.name = req.body.name;
@@ -389,6 +449,7 @@ router.delete('/:id', (req, res) => {
 - git commit...
 
 ### 15. install sequelize
+
 ```
 npm install --save sequelize
 npm install --save pg pg-hstore
@@ -404,7 +465,29 @@ sequelize init
 - seeders
 - migrations
 
-- update config/config.json- add in postgres
+#### update config/config.json- add in postgres
+
+```
+{
+  "development": {
+    "database": "hobbies",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "database": "hobbies_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "database": "hobbies_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
+
+```
+
 - git commit...
 
 ### 16. create your hobby model
@@ -418,8 +501,11 @@ sequelize db:migrate
 - git commit...
 
 ### 17. add the model to your controller
+`const Hobby = require('../models').hobby;`
 
 ### 18. update the controller
+
+
 
 ### 19. add a seeds file + db:migrate
 
