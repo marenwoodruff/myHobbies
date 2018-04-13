@@ -1,3 +1,4 @@
+
 # Sequelize CLI 
 
 ### 1. Create ERDS for models
@@ -155,18 +156,24 @@ router.get('/', (req, res) => {
 #### in views/hobbies/index.ejs
 
 ```
-<ul>
-  <% hobbies.forEach((hobby, index) => { %>
-    <li>
-      <h1><a href="<%= index %>"><%= hobby.name %></a></h1>
-      <h3>description: <%= hobby.description %></h3>
-      <p>
-         <strong>difficulty:</strong> <%= hobby.difficulty %>, 
-         <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %>
-      </p>
-    </li>
-  <% }); %>
-</ul>
+<h1>My Hobbies</h1>
+
+<% if (hobbies && hobbies.length) { %>
+  <ul>
+    <% hobbies.forEach((hobby) => { %>
+      <li class="margin-bottom">
+        <h2><a href="/hobbies/<%= id %>"><%= hobby.name %></a></h2>
+        <h3>description: <%= hobby.description %></h3>
+        <p><strong>difficulty:</strong> <%= hobby.difficulty %>, <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %></p>
+      </li>
+    <% }); %>
+
+    <a class="btn btn-outline-info margin-top" href="/hobbies/new">Add a New Hobby</a>
+  </ul>
+<% } else { %>
+  <h3>You don't have any hobbies!</h3>
+  <a class="btn btn-outline-info margin-top" href="/hobbies/new">Add a New Hobby</a>
+<% } %> 
 ```
 
 #### in public/stylesheets/styles.css
@@ -224,14 +231,11 @@ router.get('/:id', (req, res) => {
 // show route
 router.get('/:id', (req, res) => {
   // res.send('we showed it');
+  var hobby = data[req.params.id];
+  
   res.render('hobbies/show', {
-    hobby: {
-      id: req.params.id,
-      name: data[req.params.id].name,
-      description: data[req.params.id].description,
-      difficulty: data[req.params.id].difficulty,
-      levelOfProfficiency: data[req.params.id].levelOfProfficiency,
-    }
+    id: req.params.id,
+    hobby: hobby
   });
 });
 ```
@@ -247,6 +251,8 @@ router.get('/:id', (req, res) => {
    <strong>difficulty:</strong> <%= hobby.difficulty %>, 
    <strong>level of profficiency:</strong> <%= hobby.levelOfProfficiency %>
 </p>
+
+<a class="btn btn-outline-info margin-top" href="/hobbies/<%= id %>/edit">edit hobby</a>
 ```
 
 - check in postman/browser
@@ -271,38 +277,39 @@ router.get('/new', (req, res) => {
 ```
 <h1>Add a New Hobby!</h1>
 
-<div class="container>
-  <form>
-    <div class="form-group">
+<form>
+   <div class="form-group">
       <label for="name">Hobby Name <span class="red">(required)</span></label>
       <input class="form-control" type="text" id="name" required>
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="description">Description</label>
       <input class="form-control" type="text" id="description">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="difficulty">Difficulty</label>
       <input class="form-control" type="number" id="difficulty" min="0" max="5" step="0.05">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="levelOfProfficiency">Level of Profficiency</label>
       <input class="form-control" type="number" id="levelOfProfficiency" min="0" max="5" step="0.05">
-    </div>
-    
-    <div class="form-group">
+   </div>
+
+   <div class="form-group">
       <label for="hoursPracticed">Hours Practiced</label>
       <input class="form-control" type="number" id="hoursPracticed" step="0.05">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <input class="btn btn-outline-info"" type="submit" value="Submit">
-    </div>
-  </form>
-</div>
+   </div>
+</form>
+
+
+<a class="btn btn-outline-info margin-top" href="/hobbies">back</a>
 ```
 
 - check in postman/browser
@@ -313,15 +320,10 @@ router.get('/new', (req, res) => {
 ```
 // create route
 router.post('/', (req, res) => {
-  var newHobby = {
-    name: req.body.name,
-    description: req.body.description,
-    difficulty: req.body.difficulty,
-    levelOfProfficiency: req.body.levelOfProfficiency
-  };
+  var newHobby = req.body;
 
   data.seededHobbies.push(newHobby);
-  res.redirect('myHobbies/show');
+  res.redirect('/hobbies');
 });
 ```
 
@@ -340,11 +342,11 @@ router.get('/:id/edit', (req, res) => {
 });
 ```
 
-- check in postman
+- check in postman/browser
 - git commit...
 
 ### 12. set up an edit view
-`touch views/myHobbies/edit.ejs`
+`touch views/hobbies/edit.ejs`
 
 #### in controller
 
@@ -352,15 +354,11 @@ router.get('/:id/edit', (req, res) => {
 // edit route
 router.get('/:id/edit', (req, res) => {
   // res.send('we do it');
+  var hobbyToEdit = data[req.params.id];
 
-  res.render('myHobbies/edit', {
-    hobby: {
-      id: req.params.id,
-      name: data[req.params.id].name,
-      description: data[req.params.id].description,
-      difficulty: data[req.params.id].difficulty,
-      levelOfProfficiency: data[req.params.id].levelOfProfficiency,
-    }
+  res.render('hobbies/edit', {
+    id: req.params.id,
+    hobby: hobbyToEdit
   });
 });
 ```
@@ -370,38 +368,38 @@ router.get('/:id/edit', (req, res) => {
 ```
 <h1>Edit your '<%= hobby.name %>' Hobby!</h1>
 
-<div>
-  <form action="/hobbies/<%= id %>?_method=PUT" method="POST">
-    <div class="form-group">
+<form action="/hobbies/<%= id %>?_method=PUT" method="POST">
+   <div class="form-group">
       <label for="name">Hobby Name <span class="red">(required)</span></label>
       <input class="form-control" type="text" name="name" value="<%= hobby.name %>">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="description">Description</label>
       <input class="form-control" type="text" name="description" value="<%= hobby.description %>">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="difficulty">Difficulty</label>
       <input class="form-control" type="number" name="difficulty" value="<%= hobby.difficulty %>" min="0" max="5" step="0.05">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <label for="levelOfProfficiency">Level of Profficiency</label>
       <input class="form-control" type="number" name="levelOfProfficiency" value="<%= hobby.levelOfProfficiency %>" min="0" max="5" step="0.05">
-    </div>
-    
-    <div class="form-group">
+   </div>
+
+   <div class="form-group">
       <label for="hoursPracticed">Hours Practices</label>
       <input class="form-control" type="number" name="hoursPracticed" value="<%= hobby.hoursPracticed %> step="0.05">
-    </div>
+   </div>
 
-    <div class="form-group">
+   <div class="form-group">
       <input class="btn btn-outline-info margin-top" type="submit" value="Submit">
-    </div>
-  </form>
-</div>
+   </div>
+</form>
+
+<a class="btn btn-outline-info margin-top" href="/hobbies/<%= id %>">back</a>
 ```
 
 - check in postman/browser
@@ -412,17 +410,17 @@ router.get('/:id/edit', (req, res) => {
 ```
 // update route
 router.put('/:id', (req, res) => {
-  var hobbyToEdit = data[req.params.id];
+  var editedHobby = req.body;
+  data[req.params.id] = editedHobby;
 
-  hobbyToEdit.name = req.body.name;
-  hobbyToEdit.description = req.body.description;
-  hobbyToEdit.difficulty = req.body.difficulty;
-  hobbyToEdit.levelOfProfficiency = req.body.levelOfProfficiency;
-
-  res.redirect('/hobbies');
+  res.redirect('/hobbies/show', {
+     id: req.params.id,
+     hobby: editedHobby
+  });
 });
 ```
 
+- check in postman/browser
 - git commit...
 
 ### 14. add a delete route
@@ -441,12 +439,17 @@ router.delete('/:id', (req, res) => {
 #### on the show page
 
 ```
-<form action="/hobbies/<%= hobby.id %>?_method=DELETE" method="POST">
+<form action="/hobbies/<%= id %>?_method=DELETE" method="POST">
   <input class="btn btn-outline-danger sm-margin-top" type="submit" value="Delete Hobby" />
 </form>
 ```
 
+- check in postman/browser
 - git commit...
+
+---
+
+# Add Sequelize
 
 ### 15. install sequelize
 
@@ -490,7 +493,22 @@ sequelize init
 
 - git commit...
 
-### 16. create your hobby model
+### 16. create a new controller for sequelize (only so that we can compare the two
+
+```
+touch routes/hobbies_controller_sequelize.js
+```
+
+#### in app.js
+
+```
+// var hobbiesController = require('./routes/hobbies_controller');
+var hobbiesController = require('./routes/hobbies_controller_sequelize');
+```
+
+- git commit...
+
+### 17. create your hobby model
 
 ```
 sequelize model:create --name hobby -- attributes name:string,description:string,difficulty:float,levelOfProfficiency:float,hoursPracticed:float
@@ -503,9 +521,38 @@ sequelize db:migrate
 ### 17. add the model to your controller
 `const Hobby = require('../models').hobby;`
 
-### 18. update the controller
+- git commit...
 
+### 18. update the index route
 
+```
+// index route
+router.get('/', (req, res) => {
+  // res.send('we did it');
+
+  Hobby.findAll()
+    .then((hobbies) => {
+      res.render('hobbies/index', {
+        hobbies: hobbies
+      });
+    })
+    .catch((err) => {
+      res.status(400).render('error');
+    });
+});
+```
+
+#### in index.ejs
+
+`<h2><a href="/hobbies/<%= hobby.id %>"><%= hobby.name %></a></h2>`
+
+- git commit...
+
+### 19. update the show route
+
+```
+
+```
 
 ### 19. add a seeds file + db:migrate
 
