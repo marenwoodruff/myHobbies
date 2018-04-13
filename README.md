@@ -3,9 +3,18 @@
 
 ## Objective
 
-Create a hobbies app in Express, and Node- using dummy data.  Then add a postgres database and the sequelize CLI.
+### Part 1
 
-## Steps
+- Create a full CRUD hobbies app with views in Express, and Node- using dummy seed data.  
+
+### Part 2
+
+- Add a postgres database and the sequelize CLI.
+- Update routes to accomodate this.
+
+<br />
+
+## Part 1
 
 ### 1. Create ERDS for models
 hobbies
@@ -460,7 +469,7 @@ router.delete('/:id', (req, res) => {
 
 ---
 
-# Add Sequelize
+# Part 2: Add Sequelize
 
 ### 1. install sequelize
 
