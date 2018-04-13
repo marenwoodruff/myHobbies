@@ -511,6 +511,17 @@ sequelize init
 
 ```
 
+#### create your postgres database, in a new tab
+
+```
+createdb hobbies
+psql
+\l
+\c hobbies
+\d
+\q
+```
+
 - git commit...
 
 ### 2. create a new controller for sequelize (only so that we can compare the two
