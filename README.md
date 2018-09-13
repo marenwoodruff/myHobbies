@@ -31,8 +31,9 @@ express --view=ejs --git myApp
 cd myApp
 npm install
 atom .
-npm install express-ejs-layouts
-npm install method-override
+npm install express-ejs-layouts --save
+npm install method-override --save
+npm install body-parser --save
 ```
 
 #### in app.js
@@ -40,8 +41,11 @@ npm install method-override
 ```
 var ejsLayouts = require('express-ejs-layouts');
 var methodOverride = require('method-override');
+var bodyParser = require('body-parser');
 app.use(ejsLayouts);
 app.use(methodOverride('_method'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 ```
 
 #### update the title on the index controller
@@ -134,7 +138,6 @@ module.exports = {
 var data = require('../db/hobbies_data').seededHobbies;
 ```
 
-- chcek in postman/browser
 - git commit...
 
 ### 4. set up index route
@@ -167,6 +170,9 @@ router.get('/', (req, res) => {
   res.render('hobbies/index');
 });
 ```
+
+- chcek in postman/browser
+- git commit...
 
 #### in views/hobbies/index.ejs
 
