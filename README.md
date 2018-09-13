@@ -437,7 +437,7 @@ router.put('/:id', (req, res) => {
   var editedHobby = req.body;
   data[req.params.id] = editedHobby;
 
-  res.redirect('/hobbies/show', {
+  res.render('hobbies/show', {
      id: req.params.id,
      hobby: editedHobby
   });
