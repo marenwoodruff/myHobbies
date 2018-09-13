@@ -304,27 +304,27 @@ router.get('/new', (req, res) => {
 <form>
    <div class="form-group">
       <label for="name">Hobby Name <span class="red">(required)</span></label>
-      <input class="form-control" type="text" id="name" required>
+      <input class="form-control" type="text" id="name" name="name" required>
    </div>
 
    <div class="form-group">
       <label for="description">Description</label>
-      <input class="form-control" type="text" id="description">
+      <input class="form-control" type="text" id="description" name="description">
    </div>
 
    <div class="form-group">
       <label for="difficulty">Difficulty</label>
-      <input class="form-control" type="number" id="difficulty" min="0" max="5" step="0.05">
+      <input class="form-control" type="number" id="difficulty" min="0" max="5" step="0.05" name="difficulty">
    </div>
 
    <div class="form-group">
       <label for="levelOfProfficiency">Level of Profficiency</label>
-      <input class="form-control" type="number" id="levelOfProfficiency" min="0" max="5" step="0.05">
+      <input class="form-control" type="number" id="levelOfProfficiency" min="0" max="5" step="0.05" name="levelOfProfficiency">
    </div>
 
    <div class="form-group">
       <label for="hoursPracticed">Hours Practiced</label>
-      <input class="form-control" type="number" id="hoursPracticed" step="0.05">
+      <input class="form-control" type="number" id="hoursPracticed" step="0.05" name="hoursPracticed">
    </div>
 
    <div class="form-group">
